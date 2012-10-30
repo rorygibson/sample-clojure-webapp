@@ -1,11 +1,11 @@
 # Sample Clojure webapp (with DB access)
 
-## Prerequisites: 
+## Prerequisites 
 * Java 6
 * A MySQL database called _helloworld_
-* Leiningen 2 on your path
+* Leiningen 2 on your path (https://github.com/technomancy/leiningen)
 
-## Development mode:
+## Development mode
 
 ```bash
 rgibson@thingy:~$ lein deps
