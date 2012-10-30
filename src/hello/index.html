@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Sample Clojure webapp - now with ThymeLeaf</title>
+    </head>
+    <body>
+        <h1>Uh oh</h1>
+        <p>That's not how you say hello.</p>
+        <p>Are you one of these people?</p>
+
+
+<span th:text="${names}">all</span>
+
+        <ul>
+
+
+            <li th:each="n : ${names}">
+                <span th:text="${n.forename}">forename</span>
+                <span th:text="${n.surname}">surname</span>
+                <span th:text="${n}">map</span>
+            </li>
+        </ul>
+
+    </body>
+</html>

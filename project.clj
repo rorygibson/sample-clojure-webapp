@@ -5,7 +5,9 @@
                  [ring/ring-core "1.1.1"]
                  [ring/ring-jetty-adapter "1.1.1"]
                  [org.clojure/java.jdbc "0.0.6"]
-                 [mysql/mysql-connector-java "5.1.6"]]
+                 [mysql/mysql-connector-java "5.1.6"]
+                 [org.slf4j/slf4j-nop "1.6.4"]
+                 [org.thymeleaf/thymeleaf "2.0.8"]]
 
   :plugins [[lein-ring "0.7.3"]]
   :ring {:handler hello.hello/app}

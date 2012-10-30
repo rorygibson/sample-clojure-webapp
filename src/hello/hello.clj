@@ -4,7 +4,13 @@
   (:use [ring.adapter.jetty :only [run-jetty]])
   (:require [clojure.java.jdbc :as sql]
             [compojure.handler :as handler]
-            [compojure.route   :as route]))
+            [compojure.route   :as route])
+  (:import (java.util Date)
+           (org.thymeleaf TemplateEngine)
+           (org.thymeleaf.context Context)
+           (org.thymeleaf.resourceresolver FileResourceResolver)
+           (org.thymeleaf.templateresolver TemplateResolver)))
+  
 
 ;; Database creation and population
 (def db {:classname "com.mysql.jdbc.Driver"
@@ -47,34 +53,37 @@
         ["select surname from names where forename=?" forename]
         (:surname (first rows)))))
 
-;; Generating HTML
-(defn li-for [name-map]
-  (str "<li> <a href=\"/" (:forename name-map) "\">" (:forename name-map) " " (:surname name-map) "</a></li>"))   
+;; ThymeLeaf integration
+(defn create-engine []
+  (let [tr (TemplateResolver.)]
+    (.setResourceResolver tr (FileResourceResolver.))
+    (.setTemplateMode tr "XHTML")
+    (.setPrefix tr "src/hello/")
+    (.setSuffix tr ".html")
+    (let [engine (TemplateEngine.)]
+      (.setTemplateResolver engine tr)
+      engine)))
 
-(defn ul-of [seq-of-name-maps]
-  (str "<ul>" (apply str (map li-for seq-of-name-maps)) "</ul>"))
-
-(defn hello [fname sname]
-  (if (nil? sname)
-    (str "Hello " fname ", have we met before?")
-    (str "Hello " fname " " sname ", nice to see you again")))
+(defn create-context [m]
+  (reduce (fn [c [k v]] (.setVariable c k v) c) (Context.) m))
 
 ;; Actually set up the DB
 (drop-table-from db)
 (create-table-from db)
 (insert-records-in db)
 
-;; Compojure route/handler bindings
+;; Compojure route/handler bindings        
 (defroutes app-routes
   (GET "/:forename" [forename]
-    (let [surname (lookup-surname-of forename db)]
-      (hello forename surname)))          
+    (let [engine (create-engine)
+          surname (lookup-surname-of forename db)
+          context (create-context { "forename" forename "surname" surname })] 
+      (.process engine "hello" context)))
 
   (route/not-found 
-    (let [heading "<h1>Uh oh</h1>"
-          para-1  "<p>That's not how you say hello.</p>"
-          hint    "<p>Are you one of these people?</p>"]
-      (str heading para-1 hint (ul-of (all-names-from db))))))
+    (let [engine (create-engine)
+          context (create-context { "names" (vec (all-names-from db)) })] 
+      (.process engine "index" context))))
 
 (def app
   (handler/site app-routes))
