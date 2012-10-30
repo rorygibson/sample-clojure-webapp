@@ -1,5 +1,7 @@
-(ns hello-world.handler
+(ns hello.hello
+  (:gen-class)
   (:use compojure.core)
+  (:use [ring.adapter.jetty :only [run-jetty]])
   (:require [clojure.java.jdbc :as sql]
             [compojure.handler :as handler]
             [compojure.route   :as route]))
@@ -76,3 +78,6 @@
 
 (def app
   (handler/site app-routes))
+
+(defn -main []
+  (run-jetty app {:port 3000}))

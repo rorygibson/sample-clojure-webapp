@@ -1,7 +1,7 @@
-(ns hello-world.test.handler
+(ns hello.test.handler
   (:use clojure.test
         ring.mock.request  
-        hello-world.handler))
+        hello.hello))
 
 (deftest test-app
   (testing "main route"
