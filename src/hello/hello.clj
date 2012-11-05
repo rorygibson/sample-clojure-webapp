@@ -2,6 +2,7 @@
   (:gen-class)
   (:use compojure.core)
   (:use [ring.adapter.jetty :only [run-jetty]])
+  (:use ring.middleware.reload)
   (:require [clojure.java.jdbc :as sql]
             [compojure.handler :as handler]
             [compojure.route   :as route])
@@ -53,6 +54,19 @@
         ["select surname from names where forename=?" forename]
         (:surname (first rows)))))
 
+;; Utility functions to translate database return values
+(defn strip-keywords-from-map
+  "Return a new map such that keyword keys are replaced with string keys"
+  [m]
+  (let [{:keys [forename surname]} m]
+    { "forename" forename "surname" surname }))
+
+(defn strip-keywords-from-array
+  "Takes in [{:forename \"surname\"} {:forename2 \"surname2\"}] and gives back [{\"forename\" \"surname\"} {\"forename2\" \"surname2\"}]"
+  [array-of-maps]
+  (map strip-keywords-from-map array-of-maps))
+
+
 ;; ThymeLeaf integration
 (defn create-engine []
   (let [tr (TemplateResolver.)]
@@ -72,6 +86,10 @@
 (create-table-from db)
 (insert-records-in db)
 
+;; Test data
+(def all-names-static
+  [{:forename "Rory" :surname "Gibson" } {:forename "James" :surname "Smith"}])
+
 ;; Compojure route/handler bindings        
 (defroutes app-routes
   (GET "/:forename" [forename]
@@ -82,7 +100,8 @@
 
   (route/not-found 
     (let [engine (create-engine)
-          context (create-context { "names" (vec (all-names-from db)) })] 
+          names (strip-keywords-from-array (all-names-from db))
+          context (create-context { "allnames" names})]
       (.process engine "index" context))))
 
 (def app
