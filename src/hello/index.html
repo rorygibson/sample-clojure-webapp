@@ -12,7 +12,7 @@
 
         <ul>
             <li th:each="n : ${allnames}">
-                <a href="/${n.forename}">
+                <a th:href="@{'http://localhost:3000/' + ${n.forename}}">
                     <span th:text="${n.forename}">something</span>  
                     <span th:text="${n.surname}">posh</span>       
                 </a>       
