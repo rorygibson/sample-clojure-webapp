@@ -5,8 +5,8 @@
   (:require [compojure.handler :as handler]
             [compojure.route   :as route]
             [hello.util]
-            [hello.db]
-            [hello.thymeleagf]))
+            [hello.db :refer]
+            [hello.thymeleaf]))
   
 
 ;; Set up the DB
