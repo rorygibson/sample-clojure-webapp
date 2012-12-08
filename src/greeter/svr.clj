@@ -1,12 +1,12 @@
-(ns hello.svr
+(ns greeter.svr
   (:gen-class)
   (:use compojure.core)
   (:use [ring.adapter.jetty :only [run-jetty]])
   (:require [compojure.handler :as handler]
             [compojure.route   :as route]
-            [hello.util]
-            [hello.db :refer]
-            [hello.thymeleaf]))
+            [greeter.util]
+            [greeter.db :refer]
+            [greeter.thymeleaf]))
   
 
 ;; Set up the DB
@@ -20,7 +20,7 @@
     (let [engine  (create-engine)
           surname (lookup-surname-of forename db)
           context (create-context { "forename" forename "surname" surname })] 
-      (.process engine "hello" context)))
+      (.process engine "greeting" context)))
 
   (route/not-found 
     (let [engine  (create-engine)

@@ -1,4 +1,4 @@
-(ns hello.db
+(ns greeter.db
   (:require [clojure.java.jdbc :as sql]))  
 
 ;; Database creation and population

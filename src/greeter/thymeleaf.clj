@@ -1,4 +1,4 @@
-(ns hello.thymeleaf
+(ns greeter.thymeleaf
   (:import (java.util Date)
            (org.thymeleaf TemplateEngine)
            (org.thymeleaf.context Context)
@@ -10,7 +10,7 @@
   (let [tr (TemplateResolver.)]
     (.setResourceResolver tr (FileResourceResolver.))
     (.setTemplateMode tr "XHTML")
-    (.setPrefix tr "src/hello/")
+    (.setPrefix tr "src/greeter/")
     (.setSuffix tr ".html")
     (let [engine (TemplateEngine.)]
       (.setTemplateResolver engine tr)

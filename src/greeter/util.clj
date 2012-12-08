@@ -1,4 +1,4 @@
-(ns hello.util)
+(ns greeter.util)
 
 
 ;; Utility functions to translate database return values

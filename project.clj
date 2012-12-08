@@ -1,4 +1,4 @@
-(defproject hello "0.1.0-SNAPSHOT"
+(defproject helloWorld "0.1.0-SNAPSHOT"
   :description "A sample clojure webapp"
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [compojure "1.1.1"]
@@ -12,5 +12,5 @@
 
   :plugins [[lein-ring "0.7.3"] 
             [lein-expectations "0.0.7"]]
-  :ring {:handler hello.hello/app}
-  :main hello.hello)
+  :ring {:handler greeter.svr/app}
+  :main greeter.svr)
