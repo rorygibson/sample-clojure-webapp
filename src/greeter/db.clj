@@ -2,11 +2,17 @@
   (:require [clojure.java.jdbc :as sql]))  
 
 ;; Database creation and population
-(def db {:classname "com.mysql.jdbc.Driver"
+(def mysqldb {:classname "com.mysql.jdbc.Driver"
          :subprotocol "mysql"
          :subname "//localhost:3306/helloworld"
          :user "root"
          :password ""})
+
+(def h2db {:classname   "org.h2.Driver"
+           :subprotocol "h2:file"
+           :subname     (str (System/getProperty "user.dir") "/" "greeter")
+           :user        "sa"
+           :password    "" })
 
 (defn drop-table-from [conn]
   (try
